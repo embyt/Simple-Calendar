@@ -27,6 +27,12 @@ const val WEEKLY_VIEW = 4
 const val DAILY_VIEW = 5
 const val LAST_VIEW = 6
 
+const val BUSYSTATUS_FREE = 0
+const val BUSYSTATUS_TENTATIVE = 1
+const val BUSYSTATUS_BUSY = 2
+const val BUSYSTATUS_OOF = 3
+const val BUSYSTATUS_WORKINGELSEWHERE = 4
+
 const val REMINDER_OFF = -1
 
 const val ITEM_EVENT = 0

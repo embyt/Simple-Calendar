@@ -9,6 +9,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.simplemobiletools.calendar.pro.R
 import com.simplemobiletools.calendar.pro.extensions.config
+import com.simplemobiletools.calendar.pro.helpers.BUSYSTATUS_BUSY
 import com.simplemobiletools.calendar.pro.helpers.Converters
 import com.simplemobiletools.calendar.pro.helpers.REGULAR_EVENT_TYPE_ID
 import com.simplemobiletools.calendar.pro.interfaces.EventTypesDao
@@ -17,7 +18,7 @@ import com.simplemobiletools.calendar.pro.models.Event
 import com.simplemobiletools.calendar.pro.models.EventType
 import java.util.concurrent.Executors
 
-@Database(entities = [Event::class, EventType::class], version = 3)
+@Database(entities = [Event::class, EventType::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class EventsDatabase : RoomDatabase() {
 
@@ -41,6 +42,7 @@ abstract class EventsDatabase : RoomDatabase() {
                                 })
                                 .addMigrations(MIGRATION_1_2)
                                 .addMigrations(MIGRATION_2_3)
+                                .addMigrations(MIGRATION_3_4)
                                 .build()
                         db!!.openHelper.setWriteAheadLoggingEnabled(true)
                     }
@@ -77,6 +79,14 @@ abstract class EventsDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.apply {
                     execSQL("ALTER TABLE events ADD COLUMN time_zone TEXT NOT NULL DEFAULT ''")
+                }
+            }
+        }
+
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.apply {
+                    execSQL("ALTER TABLE events ADD COLUMN busy_status INTEGER NOT NULL DEFAULT $BUSYSTATUS_BUSY")
                 }
             }
         }

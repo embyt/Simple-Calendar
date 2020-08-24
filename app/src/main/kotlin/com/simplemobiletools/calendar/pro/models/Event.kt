@@ -34,6 +34,7 @@ data class Event(
     @ColumnInfo(name = "import_id") var importId: String = "",
     @ColumnInfo(name = "time_zone") var timeZone: String = "",
     @ColumnInfo(name = "flags") var flags: Int = 0,
+    @ColumnInfo(name = "busy_status") var busyStatus: Int = BUSYSTATUS_BUSY,
     @ColumnInfo(name = "event_type") var eventType: Long = REGULAR_EVENT_TYPE_ID,
     @ColumnInfo(name = "parent_id") var parentId: Long = 0,
     @ColumnInfo(name = "last_updated") var lastUpdated: Long = 0L,

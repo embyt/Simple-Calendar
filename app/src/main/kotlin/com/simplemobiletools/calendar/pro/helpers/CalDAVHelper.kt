@@ -210,7 +210,8 @@ class CalDAVHelper(val context: Context) {
                     reminder2?.minutes ?: REMINDER_OFF, reminder3?.minutes ?: REMINDER_OFF, reminder1?.type
                     ?: REMINDER_NOTIFICATION, reminder2?.type ?: REMINDER_NOTIFICATION, reminder3?.type
                     ?: REMINDER_NOTIFICATION, repeatRule.repeatInterval, repeatRule.repeatRule,
-                    repeatRule.repeatLimit, ArrayList(), attendees, importId, eventTimeZone, flags, eventTypeId, source = source)
+                    repeatRule.repeatLimit, ArrayList(), attendees, importId, eventTimeZone, flags,
+                    BUSYSTATUS_BUSY, eventTypeId, source = source)
 
             if (event.getIsAllDay()) {
                 event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
