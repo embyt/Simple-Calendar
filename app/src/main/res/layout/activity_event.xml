@@ -426,11 +426,26 @@
             android:textSize="@dimen/day_text_size"
             app:switchPadding="@dimen/small_margin"/>
 
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/event_busy_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/event_private"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_toEndOf="@+id/event_private_image"
+            android:background="?attr/selectableItemBackground"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingTop="@dimen/activity_margin"
+            android:paddingBottom="@dimen/activity_margin"
+            android:textSize="@dimen/day_text_size"
+            tools:text="Busy Status"/>
+
         <ImageView
             android:id="@+id/event_private_divider"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_below="@+id/event_private"
+            android:layout_below="@+id/event_busy_status"
             android:layout_marginTop="@dimen/medium_margin"
             android:background="@color/divider_grey"
             android:importantForAccessibility="no"/>

@@ -90,6 +90,7 @@ class EventActivity : SimpleActivity() {
     private var mOriginalTimeZone = DateTimeZone.getDefault().id
     private var mOriginalStartTS = 0L
     private var mOriginalEndTS = 0L
+    private var mBusyStatus = BUSYSTATUS_BUSY
 
     private lateinit var mEventStartDateTime: DateTime
     private lateinit var mEventEndDateTime: DateTime
@@ -445,6 +446,8 @@ class EventActivity : SimpleActivity() {
         event_private.isChecked = mEvent.isPrivate
         mEventTypeId = mEvent.eventType
         mEventCalendarId = mEvent.getCalDAVCalendarId()
+        mBusyStatus = mEvent.busyStatus
+        updateBusyStatusText()
 
         val token = object : TypeToken<List<Attendee>>() {}.type
         mAttendees = Gson().fromJson<ArrayList<Attendee>>(mEvent.attendees, token) ?: ArrayList()
@@ -873,6 +876,18 @@ class EventActivity : SimpleActivity() {
                     event_type_color.setFillWithStroke(eventType.color, config.backgroundColor)
                 }
             }
+        }
+    }
+
+    private fun updateBusyStatusText() {
+        var text = getString(R.string.busy_status_showas) + ": "
+        when (mBusyStatus) {
+            BUSYSTATUS_FREE -> event_busy_status.text = text + getString(R.string.busy_status_free)
+            BUSYSTATUS_TENTATIVE -> event_busy_status.text = text + getString(R.string.busy_status_tentative)
+            BUSYSTATUS_BUSY -> event_busy_status.text = text + getString(R.string.busy_status_busy)
+            BUSYSTATUS_OOF -> event_busy_status.text = text + getString(R.string.busy_status_oof)
+            BUSYSTATUS_WORKINGELSEWHERE -> event_busy_status.text = text + getString(R.string.busy_status_workingelsewhere)
+            else -> event_busy_status.text = getString(R.string.busy_status_showas)
         }
     }
 

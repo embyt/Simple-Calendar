@@ -167,7 +167,8 @@ class CalDAVHelper(val context: Context) {
                 Events.EVENT_TIMEZONE,
                 Events.CALENDAR_TIME_ZONE,
                 Events.DELETED,
-                Events.ACCESS_LEVEL)
+                Events.ACCESS_LEVEL,
+                Events.AVAILABILITY)
 
         val selection = "${Events.CALENDAR_ID} = $calendarId"
         context.queryCursor(uri, projection, selection, showErrors = showToasts) { cursor ->
@@ -190,6 +191,15 @@ class CalDAVHelper(val context: Context) {
             var isPrivate = cursor.getIntValue(Events.ACCESS_LEVEL) == Events.ACCESS_PRIVATE
             val attendees = Gson().toJson(getCalDAVEventAttendees(id))
 
+            var busyStatus = BUSYSTATUS_BUSY
+            when (cursor.getIntValue(Events.AVAILABILITY)) {
+                Events.AVAILABILITY_FREE -> busyStatus = BUSYSTATUS_FREE
+                Events.AVAILABILITY_TENTATIVE -> busyStatus = BUSYSTATUS_TENTATIVE
+                Events.AVAILABILITY_BUSY -> busyStatus = BUSYSTATUS_BUSY
+                // this is a work-around because CalendarContract does not provide other status infos
+                else -> busyStatus = BUSYSTATUS_OOF
+            }
+
             if (endTS == 0L) {
                 val duration = cursor.getStringValue(Events.DURATION) ?: ""
                 endTS = startTS + Parser().parseDurationSeconds(duration)
@@ -211,7 +221,7 @@ class CalDAVHelper(val context: Context) {
                     ?: REMINDER_NOTIFICATION, reminder2?.type ?: REMINDER_NOTIFICATION, reminder3?.type
                     ?: REMINDER_NOTIFICATION, repeatRule.repeatInterval, repeatRule.repeatRule,
                     repeatRule.repeatLimit, ArrayList(), attendees, importId, eventTimeZone, flags,
-                    BUSYSTATUS_BUSY, eventTypeId, source = source)
+                    busyStatus, eventTypeId, source = source)
 
             if (event.getIsAllDay()) {
                 event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
@@ -404,6 +414,14 @@ class CalDAVHelper(val context: Context) {
                 put(Events.DTEND, event.endTS * 1000L)
                 putNull(Events.DURATION)
             }
+
+            var availability = Events.AVAILABILITY_BUSY
+            when (event.busyStatus) {
+                BUSYSTATUS_FREE -> availability = Events.AVAILABILITY_FREE
+                BUSYSTATUS_TENTATIVE -> availability = Events.AVAILABILITY_TENTATIVE
+                BUSYSTATUS_BUSY -> availability = Events.AVAILABILITY_BUSY
+            }
+            put(Events.AVAILABILITY, availability)
         }
     }
 

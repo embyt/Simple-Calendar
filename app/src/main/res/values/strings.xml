@@ -130,6 +130,14 @@
     <string name="all_day">All-day</string>
     <string name="event_private">Private</string>
 
+    <!-- Event details: Busy Status -->
+    <string name="busy_status_showas">Show as</string>
+    <string name="busy_status_free">Free</string>
+    <string name="busy_status_tentative">Tentative</string>
+    <string name="busy_status_busy">Busy</string>
+    <string name="busy_status_oof">Out of Office</string>
+    <string name="busy_status_workingelsewhere">Working Elsewhere</string>
+
     <!-- Weekly view -->
     <string name="week">Week</string>
 
